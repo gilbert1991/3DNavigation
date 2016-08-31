@@ -1,22 +1,30 @@
 package com.nyu.gilbert.a3dnavigation.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.SupportMapFragment;
 import com.nyu.gilbert.a3dnavigation.R;
+import com.nyu.gilbert.a3dnavigation.fragment.BaseFragment;
+import com.nyu.gilbert.a3dnavigation.fragment.ShotFragment;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import static com.nyu.gilbert.a3dnavigation.R.id.map_shot;
+import static com.nyu.gilbert.a3dnavigation.R.id.nav_camera;
+
+public class MainActivity extends BaseActivity
+        implements NavigationView.OnNavigationItemSelectedListener, ShotFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        onNavigationItemSelected(navigationView.getMenu().getItem(0)); // Manually select the first item
     }
 
     @Override
@@ -96,8 +105,42 @@ public class MainActivity extends AppCompatActivity
 
         }
 
+        switchFragment(item);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void switchFragment(MenuItem item) {
+        Fragment fragment = null;
+
+        switch(item.getItemId()) {
+            case R.id.nav_camera:
+                fragment = getSupportFragmentManager().findFragmentById(map_shot);
+                if(fragment == null) {
+                    fragment = ShotFragment.newInstance();
+                }
+
+                break;
+//            case R.id.nav_gallery:
+//                fragment = new BaseFragment();
+//                break;
+            default:
+                fragment = new ShotFragment();
+        }
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null); //add to back stack so user can navigate back
+        transaction.commit();
+
+        item.setChecked(true);
+        setTitle(item.getTitle());
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

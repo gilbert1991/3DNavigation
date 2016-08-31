@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.BaseActivity"></activity>
+        <activity android:name=".activity.BaseActivity"/>
     </application>
 
 </manifest>
