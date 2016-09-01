@@ -18,9 +18,9 @@ import java.util.Locale;
  * Created by Gilbert on 8/31/16.
  */
 
-public class FileHandler {
+public class FileUtils {
 
-    private static final String TAG = "FileHandler";
+    private static final String TAG = "FileUtils";
 
     public static File createPublicImageFile() throws IOException {
         // Create an image file name

@@ -4,13 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -22,18 +18,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
-import com.google.android.gms.maps.SupportMapFragment;
 import com.nyu.gilbert.a3dnavigation.R;
-import com.nyu.gilbert.a3dnavigation.fragment.BaseFragment;
 import com.nyu.gilbert.a3dnavigation.fragment.ShotFragment;
-import com.nyu.gilbert.a3dnavigation.utility.FileHandler;
-
-import java.io.IOException;
+import com.nyu.gilbert.a3dnavigation.utility.FileUtils;
 
 import static com.nyu.gilbert.a3dnavigation.R.id.map_shot;
-import static com.nyu.gilbert.a3dnavigation.R.id.nav_camera;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, ShotFragment.OnFragmentInteractionListener, View.OnClickListener {
@@ -104,7 +94,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//            Intent mediaScanIntent = FileHandler.createMediaScanIntent(photoPath);
+//            Intent mediaScanIntent = FileUtils.createMediaScanIntent(photoPath);
 //            if(mediaScanIntent != null) {
 //                this.sendBroadcast(mediaScanIntent);
 //            }
@@ -176,7 +166,7 @@ public class MainActivity extends BaseActivity
         if(item == null) {
             // Take a picture from camera and save it to gallery
             verifyStoragePermissions(this);
-            Intent takePictureIntent = FileHandler.createTakePictureIntent(this);
+            Intent takePictureIntent = FileUtils.createTakePictureIntent(this);
             if(takePictureIntent != null) {
                 photoPath = (String) takePictureIntent.getExtras().get("PHOTO_PATH");
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -184,6 +174,7 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    // TODO: Replace with static methods in PermissionUtlis
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
